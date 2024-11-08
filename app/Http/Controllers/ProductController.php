@@ -33,6 +33,20 @@ class ProductController extends Controller
         return view('product.view', ['product' => $product]);
     }
 
+    public function store(Request $request)
+    {
+        // ...validation and other logic...
+
+        Product::create([
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            // ...other fields...
+        ]);
+
+        // ...existing code...
+    }
+
     private function renderProducts(Builder $query)
     {
         $search = \request()->get('search');

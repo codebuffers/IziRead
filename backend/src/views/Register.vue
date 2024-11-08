@@ -1,6 +1,6 @@
 <template>
-  <GuestLayout title="Sign in to your account">
-    <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
+  <GuestLayout title="Create a seller account">
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="register">
       <div v-if="errorMsg" class="flex items-center justify-between py-3 px-5 bg-red-500 text-white rounded">
         {{ errorMsg }}
         <span
@@ -23,41 +23,33 @@
         </svg>
       </span>
       </div>
-      <input type="hidden" name="remember" value="true"/>
       <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="name" class="sr-only">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required="" v-model="user.name"
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 placeholder="Name"/>
+        </div>
         <div>
           <label for="email-address" class="sr-only">Email address</label>
           <input id="email-address" name="email" type="email" autocomplete="email" required="" v-model="user.email"
-                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                  placeholder="Email address"/>
         </div>
         <div>
           <label for="password" class="sr-only">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required=""
+          <input id="password" name="password" type="password" autocomplete="new-password" required=""
                  v-model="user.password"
-                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                  placeholder="Password"/>
         </div>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <input id="remember-me" name="remember-me" type="checkbox" v-model="user.remember"
-                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
-          <label for="remember-me" class="ml-2 block text-sm text-gray-900"> Remember me </label>
+        <div>
+          <label for="password-confirmation" class="sr-only">Confirm Password</label>
+          <input id="password-confirmation" name="password_confirmation" type="password" autocomplete="new-password" required=""
+                 v-model="user.password_confirmation"
+                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 placeholder="Confirm Password"/>
         </div>
-
-        <div class="text-sm">
-          <router-link :to="{name: 'requestPassword'}" class="font-medium text-indigo-600 hover:text-indigo-500"> Forgot
-            your password?
-          </router-link>
-        </div>
-      </div>
-
-      <div class="text-sm text-center">
-        <router-link :to="{name: 'register'}" class="font-medium text-indigo-600 hover:text-indigo-500">
-          Register as a seller
-        </router-link>
       </div>
 
       <div>
@@ -92,8 +84,14 @@
           <span class="absolute left-0 inset-y-0 flex items-center pl-3">
               <LockClosedIcon class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true"/>
             </span>
-          Sign in
+          Sign up
         </button>
+      </div>
+
+      <div class="text-sm text-center">
+        <router-link :to="{name: 'login'}" class="font-medium text-indigo-600 hover:text-indigo-500">
+          Already have an account? Sign in
+        </router-link>
       </div>
     </form>
   </GuestLayout>
@@ -110,14 +108,16 @@ let loading = ref(false);
 let errorMsg = ref("");
 
 const user = {
+  name: '',
   email: '',
   password: '',
-  remember: false
+  password_confirmation: '',
+  is_seller: 1 
 }
 
-function login() {
+function register() {
   loading.value = true;
-  store.dispatch('login', user)
+  store.dispatch('registerSeller', user)
     .then(() => {
       loading.value = false;
       router.push({name: 'app.dashboard'})
@@ -127,5 +127,4 @@ function login() {
       errorMsg.value = response.data.message;
     })
 }
-
 </script>

@@ -22,7 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'email_verified_at',
-        'is_admin'
+        'is_admin',
+        'is_seller'
     ];
 
     /**
@@ -47,5 +48,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function customer()
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    public function is_seller()
+    {
+        return $this->is_seller;
     }
 }

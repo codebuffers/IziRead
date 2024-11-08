@@ -31,7 +31,7 @@ class ReportController extends Controller
 
     private function prepareDataForBarChart($query, $label)
     {
-        $fromDate = $this->getFromDate() ?: Carbon::now()->subDay(30);
+        $fromDate = $this->getFromDate() ?: Carbon::now()->subDays(30);
         $query
             ->select([DB::raw('CAST(created_at as DATE) AS day'), DB::raw('COUNT(created_at) AS count')])
             ->groupBy(DB::raw('CAST(created_at as DATE)'));
@@ -47,7 +47,7 @@ class ReportController extends Controller
         while ($fromDate < $now) {
             $key = $fromDate->format('Y-m-d');
             $labels[] = $key;
-            $fromDate = $fromDate->addDay(1);
+            $fromDate = $fromDate->addDay();
             $days[] = isset($records[$key]) ? $records[$key]['count'] : 0;
         }
 

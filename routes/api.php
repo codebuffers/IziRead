@@ -50,3 +50,4 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::post('/register-seller', [\App\Http\Controllers\Api\AuthController::class, 'registerSeller']);

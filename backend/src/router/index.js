@@ -17,6 +17,8 @@ import OrdersReport from "../views/Reports/OrdersReport.vue";
 import CustomersReport from "../views/Reports/CustomersReport.vue";
 import ProductForm from "../views/Products/ProductForm.vue";
 import Categories from "../views/Categories/Categories.vue";
+import Profile from "../views/Profile.vue";
+import Register from "../views/Register.vue";
 
 const routes = [
   {
@@ -86,6 +88,11 @@ const routes = [
         component: OrderView
       },
       {
+        path: 'profile',
+        name: 'app.profile',
+        component: Profile
+      },
+      {
         path: '/report',
         name: 'reports',
         component: Report,
@@ -113,6 +120,14 @@ const routes = [
     component: Login,
     meta: {
       requiresGuest: true
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register,
+    meta: {
+      requiresAuth: false
     }
   },
   {
@@ -147,11 +162,14 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !store.state.user.token) {
     next({name: 'login'})
   } else if (to.meta.requiresGuest && store.state.user.token) {
-    next({name: 'app.dashboard'})
+    if (store.state.user.data.is_seller) {
+      next({name: 'app.dashboard'})
+    } else {
+      next({name: 'home'})
+    }
   } else {
     next();
   }
-
 })
 
 export default router;
